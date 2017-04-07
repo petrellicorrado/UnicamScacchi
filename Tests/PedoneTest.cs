@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Scacchi.Modello
 {
-    public class PezziTest
+    public class PedoneTest
     {
 
         [Fact]

@@ -3,11 +3,24 @@ using System;
 namespace Scacchi.Modello.Pezzi {
     public class Torre : IPezzo
     {
-        public Colore Colore => throw new NotImplementedException();
-
+        private Colore colore;
+        public Torre(Colore colore)
+        {
+            this.colore = colore;
+        }
+        public Colore Colore {
+            get {
+                return colore;
+            }
+        }
         public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo)
         {
-            throw new NotImplementedException();
+            if((int)colonnaPartenza != (int)colonnaArrivo && (int)traversaPartenza == (int)traversaArrivo)
+                return true;
+            if((int)colonnaPartenza == (int)colonnaArrivo && (int)traversaPartenza != (int)traversaArrivo)
+                return true;
+            return false;
+                
         }
     }
 }
