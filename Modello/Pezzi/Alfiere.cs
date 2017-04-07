@@ -21,7 +21,9 @@ namespace Scacchi.Modello.Pezzi {
                     numeroColonnaArrivo = (int)colonnaArrivo,
                     numeroTraversaArrivo = (int)traversaArrivo;
 
-            if(Math.Abs(numeroColonnaArrivo - numeroColonnaPartenza) == Math.Abs(numeroTraversaArrivo-numeroTraversaPartenza))
+            if(numeroColonnaPartenza == numeroColonnaArrivo && numeroTraversaPartenza == numeroTraversaArrivo)
+                return false;
+            else if(Math.Abs(numeroColonnaArrivo - numeroColonnaPartenza) == Math.Abs(numeroTraversaArrivo-numeroTraversaPartenza))
                 return true;
             else
                 return false;
