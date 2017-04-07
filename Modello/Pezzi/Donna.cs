@@ -20,6 +20,8 @@ namespace Scacchi.Modello.Pezzi {
                     numeroColonnaArrivo = (int)colonnaArrivo,
                     numeroTraversaArrivo = (int)traversaArrivo;
             
+            if(numeroColonnaPartenza == numeroColonnaArrivo && numeroTraversaPartenza == numeroTraversaArrivo)
+                return false;
             //Mi muovo per la colonna
             if(numeroColonnaPartenza != numeroColonnaArrivo && numeroTraversaPartenza == numeroTraversaArrivo)
                 return true;
