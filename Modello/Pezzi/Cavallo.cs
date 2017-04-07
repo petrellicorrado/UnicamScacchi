@@ -26,7 +26,7 @@ namespace Scacchi.Modello.Pezzi {
             //Distanza traversa 1; Distanza Colonna 2
             if(Math.Abs(numeroTraversaPartenza - numeroTraversaArrivo) == 1 && Math.Abs(numeroColonnaPartenza - numeroColonnaArrivo) == 2)
                 return true;
-            
+            //TUTTI GLI ALTRI CASI
             return false;
             
         }
