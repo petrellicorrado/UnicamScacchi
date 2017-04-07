@@ -15,7 +15,24 @@ namespace Scacchi.Modello.Pezzi {
         }
         public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo)
         {
+            int     numeroColonnaPartenza = (int)colonnaPartenza,
+                    numeroTraversaPartenza = (int)traversaPartenza,
+                    numeroColonnaArrivo = (int)colonnaArrivo,
+                    numeroTraversaArrivo = (int)traversaArrivo;
+            
+            //Mi muovo per la colonna
+            if(numeroColonnaPartenza != numeroColonnaArrivo && numeroTraversaPartenza == numeroTraversaArrivo)
+                return true;
+            //Mi muovo per la traversa
+            if(numeroColonnaPartenza == numeroColonnaArrivo && numeroTraversaPartenza != numeroTraversaArrivo)
+                return true;
+            //Mi muovo di diagonale
+            if(Math.Abs(numeroColonnaArrivo - numeroColonnaPartenza) == Math.Abs(numeroTraversaArrivo-numeroTraversaPartenza))
+                return true;
+
+            //Qualunque altro caso
             return false;
+            
         }
     }
 }
