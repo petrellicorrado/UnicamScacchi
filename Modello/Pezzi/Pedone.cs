@@ -19,8 +19,8 @@ namespace Scacchi.Modello.Pezzi {
             Colonna colonnaArrivo,
             Traversa traversaArrivo)
         {
-            var stessaColonna = colonnaPartenza == colonnaArrivo;
-            var distanzaTraLeTraverse = (int) traversaArrivo - (int) traversaPartenza;
+            var stessaColonna = (colonnaPartenza == colonnaArrivo);
+            var distanzaTraLeTraverse = Math.Abs((int) traversaArrivo - (int) traversaPartenza);
 
             if (stessaColonna && distanzaTraLeTraverse == 1){
                 return true;
