@@ -28,5 +28,10 @@ namespace Scacchi.Modello.Pezzi {
             else
                 return false;
         }
+
+        public override string ToString()
+        {
+            return "A";
+        }
     }
 }
