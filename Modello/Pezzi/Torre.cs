@@ -3,7 +3,7 @@ using System;
 namespace Scacchi.Modello.Pezzi {
     public class Torre : IPezzo
     {
-        private Colore colore;
+        private readonly Colore colore;
         public Torre(Colore colore)
         {
             this.colore = colore;

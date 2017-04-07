@@ -40,5 +40,7 @@ namespace Scacchi.Modello
             //Then
             Assert.False(esito);
         }
+
+        
     }
 }
