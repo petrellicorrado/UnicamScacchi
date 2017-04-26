@@ -13,7 +13,8 @@ namespace Scacchi.Modello.Pezzi {
                 return colore;
             }
         }
-        public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo)
+        public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo,    
+            IScacchiera scacchiera = null)
         {
             int distanzaColonna = Math.Abs((int)colonnaPartenza - (int)colonnaArrivo);
             int distanzaTraversa = Math.Abs((int)traversaPartenza - (int)traversaArrivo);

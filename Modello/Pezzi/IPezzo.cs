@@ -9,7 +9,9 @@ namespace Scacchi.Modello.Pezzi
         bool PuòMuovere(Colonna colonnaPartenza,
             Traversa traversaPartenza,
             Colonna colonnaArrivo,
-            Traversa traversaArrivo);
-        Colore Colore { get; }
+            Traversa traversaArrivo,    
+            IScacchiera scacchiera = null); //Il metodo può muovere può essere invocato con 4 parametri
+                                            //ed il 5° sarà null però posso crearlo anche con 5 avente un parametro !null
+        public Colore Colore { get; private set; }
     }
 }

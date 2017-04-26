@@ -5,7 +5,49 @@ namespace Scacchi.Modello
 {
     public class PedoneTest
     {
+        [Fact]
+        public void IlPedoneBiancoPuoMuovereInDiagonalePerMangiare()
+        {
+            //Given
+            var pedone = new Pedone(Colore.Bianco);
+            var pedoneNero = new Pedone(Colore.Nero);
+            //When
+            bool esito = pedone.PuòMuovere(Colonna.C, Traversa.Terza, Colonna.D, Traversa.Quarta);
+            //Then
+            Assert.True(esito);
+        }
+        [Fact]
+        public void IlPedoneNonPuòRestareFermo(){
+            //Given
+            var pedone = new Pedone(Colore.Bianco);
+            //When
+            bool esito = pedone.PuòMuovere(
+                colonnaPartenza : Colonna.A,
+                traversaPartenza: Traversa.Prima,
+                colonnaArrivo : Colonna.A,
+                traversaArrivo: Traversa.Prima);
+            //Then
+            Assert.False(esito);
+        }
 
+        [Theory]
+        //Eseguo il test 2 volte, una per bianco ed una per nero
+        [InlineData(Colore.Bianco)]
+        [InlineData(Colore.Nero)]
+        public void IlReNonPuòRestareFermo(Colore c){
+            //Given
+            var re = new Re(c);
+            //When
+            bool esito = re.PuòMuovere(
+                colonnaPartenza : Colonna.A,
+                traversaPartenza: Traversa.Prima,
+                colonnaArrivo : Colonna.A,
+                traversaArrivo: Traversa.Prima);
+            //Then
+            Assert.False(esito);
+        }
+       
+       
         [Fact]
         public void IlPedoneBiancoPuoMuovereAvantiDiUnaCasa()
         {

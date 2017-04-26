@@ -16,14 +16,27 @@ namespace Scacchi.Modello
 
         internal Orologio(TimeSpan tIniziale)
         {
+            inPausa = true;
             this.tempoIniziale = tIniziale;
+            //Il timer si sveglia ogni 50 ms e "Controlla il tempo residuo"
             timer = new Timer(ControllaTempoResiduo, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(50));
         }
 
         private void ControllaTempoResiduo(object state)
         {
-            if (TempoResiduoBianco <= TimeSpan.Zero || TempoResiduoNero <= TimeSpan.Zero)
-                  TempoScaduto?.Invoke(this, null);
+            if (!inPausa && TempoResiduoBianco <= TimeSpan.Zero || TempoResiduoNero <= TimeSpan.Zero){
+                inPausa = true;
+                //this fa riferimento all'istanza attuale di orologio
+                //Forniamo come secondo parametro
+                Colore colore;
+                if(TempoResiduoBianco <= TimeSpan.Zero)
+                    colore = Colore.Bianco;
+                else
+                    colore = Colore.Nero;
+                //Dico ai sottoscrittori di che colore è il giocatore che ha lanciato l'evento
+                TempoScaduto?.Invoke(this, colore);
+            }
+                  
         }
 
         
@@ -79,7 +92,9 @@ namespace Scacchi.Modello
         }
 
 
-        public event EventHandler TempoScaduto;
+        //Consegno al sottoscrittore dell'evento un Colore (aggiungo il generic)
+        //Cioè può ricevere solo 2 colori
+        public event EventHandler<Colore> TempoScaduto;
 
         private bool acceso = false;
         public void Accendi()
@@ -121,6 +136,10 @@ namespace Scacchi.Modello
             Pausa();
             TempoResiduoBianco = tempoIniziale;
             TempoResiduoNero = tempoIniziale;
+        }
+
+        public override string ToString(){
+            return $"Orologio con tempo iniziale di {this.TempoIniziale}";
         }
     }
 }

@@ -7,5 +7,7 @@ namespace Scacchi.Modello
         Colonna Colonna {get;}
         Traversa Traversa {get;}
         IPezzo PezzoPresente {get;set;}
+
+       
     }
 }

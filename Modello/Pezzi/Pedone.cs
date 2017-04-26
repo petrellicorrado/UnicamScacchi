@@ -1,31 +1,29 @@
 using System;
 
 namespace Scacchi.Modello.Pezzi {
-    public class Pedone : IPezzo
+    public class Pedone : Pezzo
     {
-        private readonly Colore colore;
-        public Pedone(Colore colore)
+        public Pedone(Colore Colore) : base(Colore)
         {
-            this.colore = colore;    
         }
-        public Colore Colore {
-            get {
-                return colore;
-            }
-        }
-        public bool PuòMuovere(
+        public override bool PuòMuovere(
             Colonna colonnaPartenza,
             Traversa traversaPartenza,
             Colonna colonnaArrivo,
-            Traversa traversaArrivo)
+            Traversa traversaArrivo,    
+            IScacchiera scacchiera = null)
         {
+            bool puòMuovere = base.PuòMuovere( colonnaPartenza,traversaPartenza,colonnaArrivo, traversaArrivo);
+
+            if(!puòMuovere)
+            return false;
             var stessaColonna = (colonnaPartenza == colonnaArrivo);
             var distanzaTraLeTraverse = Math.Abs((int) traversaArrivo - (int) traversaPartenza);
             
             //I pedoni non possono rimanere fermi o muoversi indietro
-            if(traversaPartenza >= traversaArrivo && this.colore == Colore.Bianco)
+            if(traversaPartenza >= traversaArrivo && this.Colore == Colore.Bianco)
                 return false;
-            if(traversaPartenza <= traversaArrivo && this.colore == Colore.Nero)
+            if(traversaPartenza <= traversaArrivo && this.Colore == Colore.Nero)
                 return false;
             
             //Se è la stessa colonna vedi se è un passaggio lecito
@@ -34,10 +32,10 @@ namespace Scacchi.Modello.Pezzi {
                 if(distanzaTraLeTraverse == 1)
                     return true;
                 //Pezzo bianco che parte dall'inizio e vuole partire con 2 posizioni
-                else if(this.colore == Colore.Bianco && traversaPartenza == Traversa.Seconda && distanzaTraLeTraverse == 2)
+                else if(this.Colore == Colore.Bianco && traversaPartenza == Traversa.Seconda && distanzaTraLeTraverse == 2)
                     return true;
                 //Pezzo nero che parte dall'inizio e vuole partire con 2 posizioni
-                else if(this.colore == Colore.Nero && traversaPartenza == Traversa.Settima && distanzaTraLeTraverse == 2)
+                else if(this.Colore == Colore.Nero && traversaPartenza == Traversa.Settima && distanzaTraLeTraverse == 2)
                     return true;
                 //Qualunque altro caso non è lecito
                 else
@@ -47,9 +45,25 @@ namespace Scacchi.Modello.Pezzi {
                 return false;
             }
         }
+
         public override string ToString()
         {
-            return "";
+            return $"Pedone {Colore}";
+        }
+
+        public override bool Equals (object altroOggetto)
+        {
+            if(!(altroOggetto is Pedone))
+                return false;
+
+            //Restituisce se altro oggetto non è null ed il colori sono uguali
+            return ((Pedone) altroOggetto)?.Colore == this.Colore;
+        }
+        
+
+        public override int GetHashCode()
+        {
+            return Colore.GetHashCode();
         }
     }
 }

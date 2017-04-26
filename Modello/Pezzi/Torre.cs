@@ -13,7 +13,8 @@ namespace Scacchi.Modello.Pezzi {
                 return colore;
             }
         }
-        public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo)
+        public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo,    
+            IScacchiera scacchiera = null)
         {
             if((int)colonnaPartenza == (int)colonnaArrivo && (int)traversaPartenza == (int)traversaArrivo)
                 return false;
