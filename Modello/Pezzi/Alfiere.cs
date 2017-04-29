@@ -1,6 +1,13 @@
 using System;
+<<<<<<< HEAD
 
 namespace Scacchi.Modello.Pezzi {
+=======
+using System.Collections.Generic;
+
+namespace Scacchi.Modello.Pezzi
+{
+>>>>>>> upstream/master
     public class Alfiere : IPezzo
     {
         private readonly Colore colore;

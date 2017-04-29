@@ -6,6 +6,7 @@ namespace Scacchi.Modello {
         TimeSpan TempoResiduoNero {get;}
         Colore TurnoAttuale {get;}
         TimeSpan TempoIniziale {get;}
+        bool InPausa { get; }
 
         void Accendi();
         void Avvia();

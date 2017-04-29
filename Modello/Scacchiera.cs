@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Scacchi.Modello.Pezzi;
 
+<<<<<<< HEAD
 namespace Scacchi.Modello{
     public class Scacchiera : IScacchiera
     {
@@ -51,6 +52,56 @@ namespace Scacchi.Modello{
             else if(traversa == Traversa.Prima || traversa == Traversa.Ottava){
                 Colore colore = traversa == Traversa.Prima ? Colore.Bianco : Colore.Nero;
                 switch(colonna){
+=======
+namespace Scacchi.Modello
+{
+    public class Scacchiera : IScacchiera
+    {
+        private ICasa[] listaCase;
+
+        /*public Scacchiera() {
+            listaCase = new ICasa[64];
+            int contatore=0;
+            for (int i = 1; i < 9; i++)
+            {
+                for (int j = 1; j < 9; j++,contatore++)
+                {
+                    ICasa casa = new Casa((Colonna)j,(Traversa)i);
+                    listaCase[contatore] = casa;
+                }
+            }
+
+        }*/
+
+        public Scacchiera()
+        {
+            listaCase = Enumerable.Range(0, 64)
+            .Select(i => CreaCasa(i))
+            .ToArray();
+        }
+
+        internal ICasa CreaCasa(int i)
+        {
+            Colonna colonna = (Colonna)(i % 8 + 1);
+            Traversa traversa = (Traversa)(i / 8 + 1);
+            ICasa casa = new Casa(colonna, traversa);
+
+            if (traversa == Traversa.Seconda)
+            {
+                casa.PezzoPresente = new Pedone(Colore.Bianco);
+            }
+            else if (traversa == Traversa.Settima)
+            {
+                casa.PezzoPresente = new Pedone(Colore.Nero);
+            }
+            else if (traversa == Traversa.Prima || traversa == Traversa.Ottava)
+            {
+
+                Colore colore = traversa == Traversa.Prima ? Colore.Bianco : Colore.Nero;
+
+                switch (colonna)
+                {
+>>>>>>> upstream/master
                     case Colonna.A:
                         casa.PezzoPresente = new Torre(colore);
                         break;
@@ -80,6 +131,7 @@ namespace Scacchi.Modello{
             return casa;
         }
 
+<<<<<<< HEAD
         /*
         Indexer
         Permette di arrivare ad una specifica casa conoscendo la colonna e la traversa */
@@ -92,6 +144,21 @@ namespace Scacchi.Modello{
         public IEnumerable<ICasa> Case{
             get{
                 return listaCase;
+=======
+        public IEnumerable<ICasa> Case
+        {
+            get
+            {
+                return listaCase;
+            }
+        }
+
+        public ICasa this[Colonna colonna, Traversa traversa]
+        {
+            get
+            {
+                return listaCase[(int)colonna - 1 + (((int)traversa - 1) * 8)];
+>>>>>>> upstream/master
             }
         }
 

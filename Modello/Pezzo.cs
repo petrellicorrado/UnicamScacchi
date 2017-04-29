@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Scacchi.Modello;
 using Scacchi.Modello.Pezzi;
 
@@ -18,11 +19,11 @@ public class Pezzo : IPezzo{
             colore = value;
         }
     }
-    public virtual abstract bool PuòMuovere(Colonna colonnaPartenza,
+    public virtual bool PuòMuovere(Colonna colonnaPartenza,
             Traversa traversaPartenza,
             Colonna colonnaArrivo,
             Traversa traversaArrivo,    
-            IScacchiera scacchiera = null)
+            IEnumerable<ICasa> scacchiera = null)
     {
         if(colonnaPartenza == colonnaArrivo && traversaPartenza == traversaArrivo)
             return false;
@@ -30,4 +31,6 @@ public class Pezzo : IPezzo{
             
         return true;
     }
+
+  
 }

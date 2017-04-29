@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Scacchi.Modello.Pezzi
 {
     public interface IPezzo
@@ -6,12 +8,12 @@ namespace Scacchi.Modello.Pezzi
         //Se true: il pezzo ha potuto muoversi nella casa di destinazione
         //Se false: c'era qualcosa che gli impediva il movimento, come un pezzo "amico" dello stesso colore o un altro pezzo posto in mezzo tra partenza e destinazione
         //oppure la destinazione non era raggiungibile dal pezzo attuale (es. è stato chiesto ad una torre di muoversi in diagonale)
-        bool PuòMuovere(Colonna colonnaPartenza,
+        bool PuòMuovere(
+            Colonna colonnaPartenza,
             Traversa traversaPartenza,
             Colonna colonnaArrivo,
-            Traversa traversaArrivo,    
-            IScacchiera scacchiera = null); //Il metodo può muovere può essere invocato con 4 parametri
-                                            //ed il 5° sarà null però posso crearlo anche con 5 avente un parametro !null
-        public Colore Colore { get; private set; }
+            Traversa traversaArrivo,
+            IEnumerable<ICasa> listaCase = null);
+        Colore Colore { get; }
     }
 }

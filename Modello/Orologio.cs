@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Scacchi.Modello
@@ -14,34 +15,37 @@ namespace Scacchi.Modello
         {
         }
 
-        internal Orologio(TimeSpan tIniziale)
+        internal Orologio(TimeSpan tempoIniziale)
         {
-            inPausa = true;
-            this.tempoIniziale = tIniziale;
-            //Il timer si sveglia ogni 50 ms e "Controlla il tempo residuo"
+            Pausa();
+            this.tempoIniziale = tempoIniziale;
             timer = new Timer(ControllaTempoResiduo, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(50));
         }
 
         private void ControllaTempoResiduo(object state)
         {
-            if (!inPausa && TempoResiduoBianco <= TimeSpan.Zero || TempoResiduoNero <= TimeSpan.Zero){
+            if (!inPausa && TempoResiduoBianco <= TimeSpan.Zero || TempoResiduoNero <= TimeSpan.Zero)
+            {
                 inPausa = true;
                 //this fa riferimento all'istanza attuale di orologio
                 //Forniamo come secondo parametro
                 Colore colore;
-                if(TempoResiduoBianco <= TimeSpan.Zero)
+                if (TempoResiduoBianco <= TimeSpan.Zero)
                     colore = Colore.Bianco;
                 else
                     colore = Colore.Nero;
                 //Dico ai sottoscrittori di che colore è il giocatore che ha lanciato l'evento
                 TempoScaduto?.Invoke(this, colore);
             }
-                  
+
+
         }
 
-        
-        public TimeSpan TempoIniziale {
-            get{
+
+        public TimeSpan TempoIniziale
+        {
+            get
+            {
                 return tempoIniziale;
             }
         }
@@ -51,8 +55,8 @@ namespace Scacchi.Modello
             get
             {
 
-                if(TurnoAttuale == Colore.Bianco && !inPausa)
-                    TempoResiduoBianco = 
+                if (TurnoAttuale == Colore.Bianco && !inPausa)
+                    TempoResiduoBianco =
                         tempoIniziale - (DateTime.Now - partenzaOrologio);
                 return tempoResiduoBianco;
             }
@@ -67,8 +71,8 @@ namespace Scacchi.Modello
         {
             get
             {
-                if(TurnoAttuale == Colore.Nero && !inPausa)
-                    tempoResiduoNero = 
+                if (TurnoAttuale == Colore.Nero && !inPausa)
+                    tempoResiduoNero =
                         tempoIniziale - (DateTime.Now - partenzaOrologio);
                 return tempoResiduoNero;
             }
@@ -91,28 +95,43 @@ namespace Scacchi.Modello
             }
         }
 
+        public bool InPausa{
+            get{
+                return inPausa;
+            }
+        }
+
 
         //Consegno al sottoscrittore dell'evento un Colore (aggiungo il generic)
         //Cioè può ricevere solo 2 colori
+        public override string ToString()
+        {
+            return $"Orologio con tempo iniziale di {this.tempoIniziale}";
+        }
         public event EventHandler<Colore> TempoScaduto;
 
         private bool acceso = false;
         public void Accendi()
         {
             acceso = true;
-            inPausa = true;
             Reset();
         }
 
         private DateTime partenzaOrologio = DateTime.MinValue;
-        private bool inPausa = false;
+        private bool inPausa;
         public void Avvia()
         {
-            if(!acceso)
-                throw new InvalidOperationException(
-                    "L'Orologio deve essere acceso, per poter essere avviato!");
+            if (!acceso)
+                SollevaEccezione();
             partenzaOrologio = DateTime.Now;
             inPausa = false;
+        }
+
+        [DebuggerHidden]
+        private void SollevaEccezione()
+        {
+            throw new InvalidOperationException(
+                    "L'Orologio deve essere acceso, per poter essere avviato!");
         }
 
         public void Pausa()
@@ -120,11 +139,15 @@ namespace Scacchi.Modello
             inPausa = true;
         }
 
-        public void FineTurno() {
-            if(TurnoAttuale == Colore.Bianco) {
+        public void FineTurno()
+        {
+            if (TurnoAttuale == Colore.Bianco)
+            {
                 tempoResiduoBianco = tempoIniziale;
                 TurnoAttuale = Colore.Nero;
-            } else {
+            }
+            else
+            {
                 TempoResiduoNero = tempoIniziale;
                 TurnoAttuale = Colore.Bianco;
             }
@@ -138,7 +161,8 @@ namespace Scacchi.Modello
             TempoResiduoNero = tempoIniziale;
         }
 
-        public override string ToString(){
+        public override string ToString()
+        {
             return $"Orologio con tempo iniziale di {this.TempoIniziale}";
         }
     }

@@ -1,4 +1,8 @@
 using System;
+<<<<<<< HEAD
+=======
+using System.Collections.Generic;
+>>>>>>> upstream/master
 
 namespace Scacchi.Modello.Pezzi {
     public class Cavallo : IPezzo
@@ -13,6 +17,7 @@ namespace Scacchi.Modello.Pezzi {
                 return colore;
             }
         }
+<<<<<<< HEAD
         public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo,    
             IScacchiera scacchiera = null)
         {
@@ -34,6 +39,33 @@ namespace Scacchi.Modello.Pezzi {
         public override string ToString()
         {
             return "C";
+=======
+        public bool PuòMuovere(
+            Colonna colonnaPartenza,
+            Traversa traversaPartenza,
+            Colonna colonnaArrivo,
+            Traversa traversaArrivo,
+            IEnumerable<ICasa> listaCase = null)
+        {
+            var differenzaColonne = colonnaPartenza - colonnaArrivo;
+            var differenzaTraverse = (int) traversaPartenza - (int) traversaArrivo;
+            if(differenzaTraverse == 2 || differenzaTraverse == -2){
+                if(differenzaColonne == 1 || differenzaColonne == -1){
+                    return true;
+                } else{
+                    return false;
+                }
+            } else if(differenzaColonne == 2 || differenzaColonne == -2){
+                
+                if(differenzaTraverse == 1 || differenzaTraverse == -1){
+                    return true;
+                } else{
+                    return false;
+                }
+            } else{
+                return false;
+            }
+>>>>>>> upstream/master
         }
     }
 }
