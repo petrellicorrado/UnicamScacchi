@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using Scacchi.Modello;
 using Scacchi.Extensions_methods;
@@ -13,97 +16,104 @@ namespace Scacchi
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
-            Console.SetWindowSize(100, 30);
-            SimpleXUnitRunner.SimpleXUnit.RunTests();
-            Console.ReadKey();
-            IScacchiera scacchiera = new Scacchiera();
-            scacchiera
-            .Case
-            .ConPezzi(Colore.Bianco) //extension methods personale
-            .DiTipo<Pedone>();
-
-            //COVARIANZA
-            //Noi facciamo sempre questo!!
-            IPezzo pezzo = new Pedone(Colore.Bianco);
-            //Non è possibile!!
-            //Tutti i Pedoni sono IPezzo ma non tutti gli IPezzo sono pedoni
-            /*List<IPezzo> pezzi = new List<Pedone>{
-                new Pedone(Colore.Bianco), new Pedone(Colore.Nero)
-            }*/
-            //Se facessi pezzi.Add() mi consiglierebbe un IPezzo ma nulla mi dice
-            //che non posso inserire una Torre, nella dichiarazione posso aggiungere
-            //solo oggetti di IPezzo (tra cui Pedoni)
-
-            //Posso farlo se faccio perchè IEnumerable non mi permette di modificare la collezione!!
-            IEnumerable<IPezzo> pezzi = new List<Pedone>{
-                new Pedone(Colore.Bianco), new Pedone(Colore.Nero)
-            };
-
-            //Proviamo con degli array - FUNZIONA!
-            //Ma ci sono rischi a runtime
-            IPezzo[] pezzi2 = new Pedone[]{
-                new Pedone(Colore.Bianco), new Pedone(Colore.Nero)
-            };
-            //GENERA ERRORI A RUNTIME! pezzi[0] = new Torre(Colore.Bianco);
-
-
-            /*
-            IOrologio orologio = new Orologio(TimeSpan.FromSeconds(5));
-            //Quando l'evento viene sollevato invoco NotificaSconfitta
-            //Bisogna sottoscrivere gli eventi il prima possibile
-            orologio.TempoScaduto += NotificaSconfitta;
-            orologio.Accendi();
-            //Non vengo più notificato dell'evento orologio.TempoScaduto -= NotificaSconfitta;
-            orologio.Avvia();
-           
-            Console.ReadKey();
-
-            /*
-                Sintassi più compatta di orologio.TempoScaduto += NotificaSconfitta;
-
-                orologio.TempoScaduto+=(sender,colore) => { Console.WriteLine($"Il giocatore {colore} ha perso la partita, secondo l'orologio {sender}"); }
-
-                Questa è chiamata lambda expression!!!
-
-                Vantaggi: Non devo creare NotificaSconfitta!
-                            La lambdaexpression non ha nome e quindi non posso riusarla (quindi non posso disiscrivermi! dovrei
-                            mettere la lambda e. in una variabile)
-                            E' presente il simbolo => che dice "partendo con questi argomenti farò qualcosa nelle parentesi graffe"
-            */
-
-
-
-            /*
-             ESEMPIO Dictionary (è modellato male dato che una partita non ha solo 1 scacch.)
-
-            
-             Dictionary<int, IScacchiera> partite = new Dictionary<int, IScacchiera>();
-             int contatore = 1;
-             partite.Add(contatore,new Scacchiera());
-             //L'utente ha mosso un pezzo
-             int chiave = 2;
-             if(partite.ContainsKey(chiave)) //controllo che la chiave esista
-                Console.WriteLine(partite[chiave].Case.Count());
-            else
-                Console.WriteLine("Non riesco a trovare questa partita");
-             
-
-             var pedone1 = new Pedone(Colore.Bianco);
-             var pedone2 = new Pedone(Colore.Bianco);
-             var dizionario = new Dictionary<Pedone, string>();
-             dizionario.Add(pedone1, "Moreno");
-             //non posso fare questa cosa perchè pedone1 == pedone2 sia per equals e sia per gethashcode
-             dizionario.Add(pedone2, "Moreno");
-
-             */
+            //Console.SetWindowSize(100, 30);
+            //SimpleXUnitRunner.SimpleXUnit.RunTests();
+            //Console.ReadKey();
+            GiocaPartita();
         }
 
-        /*
-        Ho generato un metodo che ha un sender (chi ha generato l'evento) e ciò che invia 
-        */
-        private static void NotificaSconfitta(object sender, Colore colore)
-        {
-            Console.WriteLine($"Il giocatore {colore} ha perso la partita, secondo l'orologio {sender}");
+        private static void GiocaPartita() {
+            IScacchiera scacchiera = new Scacchiera();
+            IOrologio orologio = new Orologio();
+            IBloccoNote bloccoNote = new BloccoNote();
+            ITavolo tavolo = new Tavolo(scacchiera, orologio, bloccoNote);
+            bool partitaInCorso = true;
+            tavolo.Vittoria += (sender, colore) => {
+                Console.Clear();
+                Console.WriteLine($"Vince {tavolo.Giocatori[colore].Nome} ({colore})!");
+                partitaInCorso = false;
+                tavolo.FinisciPartita();
+            };
+            Console.Write("Giocatore bianco: ");
+            string giocatoreBianco = Console.ReadLine();
+
+            Console.Write("Giocatore nero: ");
+            string giocatoreNero = Console.ReadLine();
+            tavolo.RiceviGiocatori(giocatoreBianco, giocatoreNero);
+            tavolo.AvviaPartita();
+            bool errore = false;
+            bool automatico = false;
+            while (partitaInCorso) {
+                Console.Clear();
+                Colore coloreDiTurno = orologio.TurnoAttuale;
+                Console.WriteLine($"{tavolo.Giocatori[Colore.Bianco].Nome} ({Colore.Bianco}) VS {tavolo.Giocatori[Colore.Nero].Nome} ({Colore.Nero})");
+                Console.WriteLine();
+                Disegna(scacchiera);
+                Console.WriteLine();
+                if (errore)
+                    Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"Muove {tavolo.Giocatori[coloreDiTurno].Nome} ({coloreDiTurno}): ");
+                Console.ForegroundColor = ConsoleColor.White;
+                string mossa;
+                if (automatico){
+                    mossa = DeterminaMossa(scacchiera, orologio.TurnoAttuale);
+                    Console.Write(mossa);
+                    Thread.Sleep(200);
+                 } else {
+                    mossa = Console.ReadLine();
+                 }
+                if (mossa.Equals("auto", StringComparison.OrdinalIgnoreCase)) {
+                    automatico = true;
+                    mossa = DeterminaMossa(scacchiera, orologio.TurnoAttuale);
+                    Console.Write(mossa);
+                    Thread.Sleep(200);
+                }
+
+                try{
+                    errore = false;
+                    tavolo.InserisciMossa(mossa);
+                } catch (Exception) {
+                    errore = true;
+                    automatico = false;
+                }
+            }
+            Console.ReadLine();
+        }
+
+        private static void Disegna(IScacchiera scacchiera) {
+        for (var i = 8; i>=1; i--){
+                Console.Write(i);
+                Console.Write(" ");
+                
+                for (var j = 1; j<=8; j++) {
+                    Console.BackgroundColor = (i+j) % 2 != 0 ? ConsoleColor.Black : ConsoleColor.DarkGray;
+                    var pezzo = scacchiera[(Colonna) j, (Traversa) i].PezzoPresente;
+                    var carattere = pezzo != null ? pezzo.Carattere : ' ';
+                    Console.Write($" {carattere} ");
+                }
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.WriteLine(" ");
+            }
+            Console.Write("  ");
+            for (var i = 1; i<=8; i++){
+                Console.Write($" {(Colonna)i} ");
+            }
+            Console.WriteLine();
+        }
+
+        private static string DeterminaMossa(IScacchiera scacchiera, Colore colore){
+            var pezziGiocabili = scacchiera.Case.Where(casa => casa.PezzoPresente?.Colore == colore).OrderBy(casa => Guid.NewGuid()).ToList();
+            foreach (var pezzoGiocabile in pezziGiocabili) {
+                var destinazioneScelta = scacchiera
+                .Case.ToList()
+                .Where(casa => casa.PezzoPresente==null || casa.PezzoPresente.Colore != colore)
+                .OrderBy(casa => Guid.NewGuid())
+                .FirstOrDefault(casa => pezzoGiocabile.PezzoPresente.PuòMuovere(pezzoGiocabile.Colonna, pezzoGiocabile.Traversa, casa.Colonna, casa.Traversa, scacchiera.Case));
+                if (destinazioneScelta == null)
+                    continue;
+                return $"{pezzoGiocabile.Colonna}{(int) pezzoGiocabile.Traversa} {destinazioneScelta.Colonna}{(int) destinazioneScelta.Traversa}";
+            }
+            return "";
         }
 
         /*var pedone1 = new Pedone(Colore.Bianco);

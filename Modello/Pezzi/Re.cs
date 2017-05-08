@@ -8,6 +8,11 @@ namespace Scacchi.Modello.Pezzi {
         public Re(Colore colore) : base(colore)
         {
         }
+        public override char Carattere {
+            get {
+                return Colore == Colore.Bianco ?  '♚' : '♔';
+            }
+        }
         public override bool PuòMuovere(
             Colonna colonnaPartenza,
             Traversa traversaPartenza,
