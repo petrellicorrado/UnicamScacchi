@@ -5,10 +5,11 @@ using System.Linq;
 namespace Scacchi.Modello.Pezzi {
     public class Pedone : Pezzo
     {
-        public Pedone(Colore Colore) : base(Colore)
+        public Pedone(Colore colore) : base(colore)
         {
         }
-
+        
+        
         public override bool PuòMuovere(
             Colonna colonnaPartenza,
             Traversa traversaPartenza,
@@ -16,9 +17,10 @@ namespace Scacchi.Modello.Pezzi {
             Traversa traversaArrivo,
             IEnumerable<ICasa> listaCase = null)
         {
-            bool mossaPossibile = base.PuòMuovere(colonnaPartenza,traversaPartenza,colonnaArrivo,traversaArrivo,listaCase);
-            if(!mossaPossibile)
+            bool puòMuovere = base.PuòMuovere(colonnaPartenza, traversaPartenza, colonnaArrivo, traversaArrivo, listaCase);
+            if (!puòMuovere)
                 return false;
+
             listaCase = listaCase??Enumerable.Empty<ICasa>();
 
                 ICasa casaPartenza = listaCase.SingleOrDefault(casa => casa.Colonna == colonnaPartenza 

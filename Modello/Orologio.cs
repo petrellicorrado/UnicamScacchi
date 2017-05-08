@@ -138,11 +138,9 @@ namespace Scacchi.Modello
         {
             inPausa = true;
         }
-
-        public void FineTurno()
-        {
-            if (TurnoAttuale == Colore.Bianco)
-            {
+        
+        public void FineTurno() {
+            if(TurnoAttuale == Colore.Bianco) {
                 tempoResiduoBianco = tempoIniziale;
                 TurnoAttuale = Colore.Nero;
             }
@@ -161,9 +159,5 @@ namespace Scacchi.Modello
             TempoResiduoNero = tempoIniziale;
         }
 
-        public override string ToString()
-        {
-            return $"Orologio con tempo iniziale di {this.TempoIniziale}";
-        }
     }
 }

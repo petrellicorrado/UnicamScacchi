@@ -1,52 +1,27 @@
 using System;
-<<<<<<< HEAD
-=======
 using System.Collections.Generic;
->>>>>>> upstream/master
+using System.Linq;
 
 namespace Scacchi.Modello.Pezzi {
-    public class Cavallo : IPezzo
+    public class Cavallo : Pezzo
     {
-        private readonly Colore colore;
-        public Cavallo(Colore colore)
-        {
-            this.colore = colore;    
+        public Cavallo(Colore colore) : base(colore)
+        {    
         }
-        public Colore Colore {
-            get {
-                return colore;
-            }
-        }
-<<<<<<< HEAD
-        public bool PuòMuovere(Colonna colonnaPartenza, Traversa traversaPartenza, Colonna colonnaArrivo, Traversa traversaArrivo,    
-            IScacchiera scacchiera = null)
-        {
-            int     numeroColonnaPartenza = (int)colonnaPartenza,
-                    numeroTraversaPartenza = (int)traversaPartenza,
-                    numeroColonnaArrivo = (int)colonnaArrivo,
-                    numeroTraversaArrivo = (int)traversaArrivo;
-            
-            //Distanza traversa 2; Distanza Colonna 1
-            if(Math.Abs(numeroTraversaPartenza - numeroTraversaArrivo) == 2 && Math.Abs(numeroColonnaPartenza - numeroColonnaArrivo) == 1)
-                return true;
-            //Distanza traversa 1; Distanza Colonna 2
-            if(Math.Abs(numeroTraversaPartenza - numeroTraversaArrivo) == 1 && Math.Abs(numeroColonnaPartenza - numeroColonnaArrivo) == 2)
-                return true;
-            //TUTTI GLI ALTRI CASI
-            return false;
-            
-        }
-        public override string ToString()
-        {
-            return "C";
-=======
-        public bool PuòMuovere(
+        public override bool PuòMuovere(
             Colonna colonnaPartenza,
             Traversa traversaPartenza,
             Colonna colonnaArrivo,
             Traversa traversaArrivo,
             IEnumerable<ICasa> listaCase = null)
         {
+            listaCase = listaCase??Enumerable.Empty<ICasa>();
+            ICasa casaPartenza = listaCase.SingleOrDefault(casa => casa.Colonna == colonnaPartenza
+            && casa.Traversa == traversaPartenza && casa.PezzoPresente == this);
+            ICasa casaArrivo = listaCase.SingleOrDefault(casa => casa.Colonna == colonnaArrivo && casa.Traversa == traversaArrivo);
+            if(casaArrivo?.PezzoPresente?.Colore == this.Colore) {
+                return false;
+            }
             var differenzaColonne = colonnaPartenza - colonnaArrivo;
             var differenzaTraverse = (int) traversaPartenza - (int) traversaArrivo;
             if(differenzaTraverse == 2 || differenzaTraverse == -2){
@@ -65,7 +40,6 @@ namespace Scacchi.Modello.Pezzi {
             } else{
                 return false;
             }
->>>>>>> upstream/master
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Scacchi.Modello.Pezzi {
         public Re(Colore colore) : base(colore)
         {
         }
-       
         public override bool PuòMuovere(
             Colonna colonnaPartenza,
             Traversa traversaPartenza,
@@ -17,7 +16,7 @@ namespace Scacchi.Modello.Pezzi {
             IEnumerable<ICasa> listaCase = null)
         {
             bool mossaPossibile = base.PuòMuovere(colonnaPartenza,traversaPartenza,colonnaArrivo,traversaArrivo,listaCase);
-            if(!mossaPossibile)
+            if (!mossaPossibile)
                 return false;
             var differenzaColonne = colonnaPartenza - colonnaArrivo;
             var differenzaTraverse = (int) traversaPartenza - (int) traversaArrivo;
