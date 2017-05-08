@@ -16,6 +16,5 @@ namespace Scacchi.Modello {
 
         /*Impone che il mio metodo che vuole sottoscriversi abbia un parametro di tipo Colore */
         event EventHandler<Colore> TempoScaduto;
-        bool InPausa { get; }
     }
 }
