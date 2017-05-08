@@ -1,18 +1,10 @@
 ﻿using System;
-<<<<<<< HEAD
 using System.Threading;
 using Scacchi.Modello;
 using Scacchi.Extensions_methods;
 using Scacchi.Modello.Pezzi;
 using System.Collections.Generic;
 using System.Linq;
-=======
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Scacchi.Modello;
-using Scacchi.Modello.Pezzi;
->>>>>>> upstream/master
 
 namespace Scacchi
 {
@@ -24,7 +16,6 @@ namespace Scacchi
             Console.SetWindowSize(100, 30);
             SimpleXUnitRunner.SimpleXUnit.RunTests();
             Console.ReadKey();
-<<<<<<< HEAD
             IScacchiera scacchiera = new Scacchiera();
             scacchiera
             .Case
@@ -113,8 +104,6 @@ namespace Scacchi
         private static void NotificaSconfitta(object sender, Colore colore)
         {
             Console.WriteLine($"Il giocatore {colore} ha perso la partita, secondo l'orologio {sender}");
-=======
->>>>>>> upstream/master
         }
 
         /*var pedone1 = new Pedone(Colore.Bianco);
